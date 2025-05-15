@@ -16,9 +16,24 @@ export default function TaskBoard() {
   };
   const [tasks, setTasks] = useState([defaultTask]);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [taskToUpdate, setTaskToUpdate] = useState(null);
 
-  const handleOnSave = (task) => {
-    setTasks([...tasks, task]);
+  const handleOnSave = (task, isAdd) => {
+    if (isAdd) {
+      setTasks([...tasks, task]);
+    } else {
+      setTasks(tasks.map((t) => (task.id === t.id ? task : t)));
+    }
+    setShowTaskModal(false);
+  };
+
+  const handleOnEdit = (task) => {
+    setTaskToUpdate(task);
+    setShowTaskModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setTaskToUpdate(null);
     setShowTaskModal(false);
   };
 
@@ -29,10 +44,16 @@ export default function TaskBoard() {
 
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           <TaskActions setShowTaskModal={setShowTaskModal} />
-          <TasksList tasks={tasks} />
+          <TasksList tasks={tasks} onEdit={handleOnEdit} />
         </div>
 
-        {showTaskModal && <TaskModal setShowTaskModal={setShowTaskModal} onSave={handleOnSave} />}
+        {showTaskModal && (
+          <TaskModal
+            onSave={handleOnSave}
+            taskToUpdate={taskToUpdate}
+            onCloseModal={handleCloseModal}
+          />
+        )}
       </div>
     </section>
   );
