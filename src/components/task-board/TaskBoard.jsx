@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AddTaskModal from "./AddTaskModal";
 import SearchTask from "./SearchTask";
 import TaskActions from "./TaskActions";
+import TaskModal from "./TaskModal";
 import TasksList from "./TasksList";
 
 export default function TaskBoard() {
@@ -15,18 +15,24 @@ export default function TaskBoard() {
     isFavorite: false,
   };
   const [tasks, setTasks] = useState([defaultTask]);
-  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+
+  const handleOnSave = (task) => {
+    setTasks([...tasks, task]);
+    setShowTaskModal(false);
+  };
+
   return (
     <section className="mb-20" id="tasks">
       <div className="container mx-auto relative">
-        <div>{showAddTaskModal && <AddTaskModal />}</div>
-
         <SearchTask />
 
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-          <TaskActions />
+          <TaskActions setShowTaskModal={setShowTaskModal} />
           <TasksList tasks={tasks} />
         </div>
+
+        {showTaskModal && <TaskModal setShowTaskModal={setShowTaskModal} onSave={handleOnSave} />}
       </div>
     </section>
   );

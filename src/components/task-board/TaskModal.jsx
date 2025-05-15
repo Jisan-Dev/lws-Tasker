@@ -1,9 +1,53 @@
-export default function AddTaskModal() {
-  return (
-    <div className="relative">
-      <div className="bg-black/30 h-full w-full z-20 fixed top-0 left-0"></div>
+import { useState } from "react";
 
-      <form className="mx-auto my-10 w-full max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 ">
+export default function TaskModal({ setShowTaskModal, onSave }) {
+  const [task, setTask] = useState({
+    id: crypto.randomUUID(),
+    title: "",
+    description: "",
+    tags: [],
+    priority: "",
+    isFavorite: false,
+  });
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+  //   const data = Object.fromEntries(formData.entries());
+
+  //   const tagsArr = data.tags.split(",").map((tag) => tag.trim());
+
+  //   const newData = {
+  //     ...data,
+  //     tags: tagsArr,
+  //     isFavorite: false,
+  //   };
+
+  //   console.log(newData);
+
+  //   setTasks((prevTasks) => [...prevTasks, newData]);
+  //   setShowTaskModal(false);
+  //   // Here you can send the data to your backend or perform any other action
+  // };
+
+  const handleChange = (e) => {
+    let { name, value } = e.target;
+    if (name === "tags") {
+      value = value.split(",").map((tag) => tag.trim());
+    }
+    setTask({
+      ...task,
+      [name]: value,
+    });
+  };
+
+  return (
+    <>
+      <div
+        onClick={() => setShowTaskModal(false)}
+        className="bg-black/30 h-full w-full z-20 fixed top-0 left-0"></div>
+
+      <form className="mx-auto my-10 w-full max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 absolute top-30 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 ">
         <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
           Add New Task
         </h2>
@@ -18,6 +62,9 @@ export default function AddTaskModal() {
               type="text"
               name="title"
               id="title"
+              value={task.title}
+              // onChange={(e) => setTask({ ...task, title: e.target.value })}
+              onChange={handleChange}
               required
             />
           </div>
@@ -29,6 +76,8 @@ export default function AddTaskModal() {
               type="text"
               name="description"
               id="description"
+              value={task.description}
+              onChange={handleChange}
               required></textarea>
           </div>
           {/* <!-- input group --> */}
@@ -41,6 +90,8 @@ export default function AddTaskModal() {
                 type="text"
                 name="tags"
                 id="tags"
+                value={task.tags}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -51,6 +102,8 @@ export default function AddTaskModal() {
                 className="block w-full cursor-pointer rounded-md bg-[#2D323F] px-3 py-2.5"
                 name="priority"
                 id="priority"
+                value={task.priority}
+                onChange={handleChange}
                 required>
                 <option value="">Select Priority</option>
                 <option value="low">Low</option>
@@ -63,12 +116,16 @@ export default function AddTaskModal() {
         {/* <!-- inputs ends --> */}
         <div className="mt-16 flex justify-center lg:mt-20">
           <button
-            type="submit"
+            // type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              onSave(task);
+            }}
             className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80">
             Create new Task
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 }
