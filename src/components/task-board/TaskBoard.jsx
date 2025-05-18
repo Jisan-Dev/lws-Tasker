@@ -37,10 +37,15 @@ export default function TaskBoard() {
     setShowTaskModal(false);
   };
 
+  const [noTasksFoundText, setNoTasksFoundText] = useState("No Tasks Found. Please Add One.");
+
   const handleSearch = (searchTerm) => {
     const filteredTasks = tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    if (filteredTasks.length === 0) {
+      setNoTasksFoundText("No Tasks Found for this search term.");
+    }
     setTasks(filteredTasks);
   };
 
@@ -79,7 +84,7 @@ export default function TaskBoard() {
               onFav={handleFav}
             />
           ) : (
-            <p className="text-center text-3xl">No Tasks Found. Please Add One.</p>
+            <p className="text-center text-3xl">{noTasksFoundText}</p>
           )}
         </div>
 
