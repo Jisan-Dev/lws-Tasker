@@ -1,4 +1,15 @@
-export default function SearchTask() {
+import { useState } from "react";
+
+export default function SearchTask({ onSearch }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() === "") {
+      return;
+    }
+    onSearch(searchTerm);
+  };
+
   return (
     <div className="p-2 flex justify-end">
       <form>
@@ -7,12 +18,21 @@ export default function SearchTask() {
             <input
               type="search"
               id="search-dropdown"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSearch(searchTerm);
+                }
+              }}
+              value={searchTerm}
               className="z-20 block w-full bg-gray-800 px-4 py-2 pr-10 focus:outline-none"
               placeholder="Search Task"
               required
             />
             <button
               type="submit"
+              onClick={handleSubmit}
               className="absolute right-2 top-0 h-full rounded-e-lg text-white md:right-4">
               <svg
                 className="h-4 w-4"
