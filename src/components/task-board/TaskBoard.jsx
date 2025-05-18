@@ -48,6 +48,18 @@ export default function TaskBoard() {
     setTasks([]);
   };
 
+  const handleFav = (id) => {
+    // const taskIndex = tasks.findIndex((task) => task.id === id);
+    // const newTasks = [...tasks];
+    // newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
+    // setTasks(newTasks);
+
+    // The better way of managing updates in the object within an array as a state in react.
+    setTasks(
+      tasks.map((task) => (task.id === id ? { ...task, isFavorite: !task.isFavorite } : task))
+    );
+  };
+
   return (
     <section className="mb-20" id="tasks">
       <div className="container mx-auto relative">
@@ -55,7 +67,11 @@ export default function TaskBoard() {
 
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           <TaskActions setShowTaskModal={setShowTaskModal} onDeleteAll={handleDeleteAll} />
-          <TasksList tasks={tasks} onEdit={handleOnEdit} />
+          {tasks.length > 0 ? (
+            <TasksList tasks={tasks} onEdit={handleOnEdit} onFav={handleFav} />
+          ) : (
+            <p className="text-center text-3xl">No Tasks Found. Please Add One.</p>
+          )}
         </div>
 
         {showTaskModal && (

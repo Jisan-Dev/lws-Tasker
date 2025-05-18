@@ -1,4 +1,6 @@
-export default function TasksList({ tasks, onEdit }) {
+import { FaStar } from "react-icons/fa";
+
+export default function TasksList({ tasks, onEdit, onFav }) {
   return (
     <div className="overflow-auto">
       <table className="table-fixed overflow-auto xl:w-full">
@@ -16,35 +18,9 @@ export default function TasksList({ tasks, onEdit }) {
           {tasks.map((task) => (
             <tr className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
               <td>
-                {task.isFavorite ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FFB800"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-star w-5 h-5">
-                    <polygon points="2 9.24 9.76 9.24 12 2 14.24 9.24 22 9.24 16.12 14.76 18.24 22 12 17.76 5.76 22 7.88 14.76"></polygon>
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#4B5563"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-star w-5 h-5">
-                    <polygon points="2 9.24 9.76 9.24 12 2 14.24 9.24 22 9.24 16.12 14.76 18.24 22 12 17.76 5.76 22 7.88 14.76"></polygon>
-                  </svg>
-                )}
+                <button onClick={() => onFav(task.id)}>
+                  {task.isFavorite ? <FaStar color="yellow" /> : <FaStar color="gray" />}
+                </button>
               </td>
               <td>{task.title}</td>
               <td>
