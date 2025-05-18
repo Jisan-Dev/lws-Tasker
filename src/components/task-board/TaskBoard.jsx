@@ -44,13 +44,17 @@ export default function TaskBoard() {
     setTasks(filteredTasks);
   };
 
+  const handleDeleteAll = () => {
+    setTasks([]);
+  };
+
   return (
     <section className="mb-20" id="tasks">
       <div className="container mx-auto relative">
         <SearchTask onSearch={handleSearch} />
 
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-          <TaskActions setShowTaskModal={setShowTaskModal} />
+          <TaskActions setShowTaskModal={setShowTaskModal} onDeleteAll={handleDeleteAll} />
           <TasksList tasks={tasks} onEdit={handleOnEdit} />
         </div>
 
